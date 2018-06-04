@@ -52,10 +52,12 @@ router.put('/user/:uid', wrap(async (req, res) => {
 // 전체 수행원의 이름, auth 정보 불러옴
 router.get('/users', wrap(async (req, res) => {
   if (req.session.user.auth === 1) {
+    console.log('adminnnn');
     const users = await models.user.findAll({
       attributes: ['uid', 'name', 'auth']
     });
     if (users) {
+      console.log('adminnnnmmm');
       res.send(users);
     }
   }
@@ -96,6 +98,19 @@ router.get('/user/:uid', wrap(async (req, res) => {
     }
   } else {
     res.status(500).send('error');
+  }
+}));
+
+// 선택한 유저 삭제
+router.delete('/user/:uid', wrap(async (req, res) => {
+  console.log('delete');
+  const destroy = await models.user.destroy({
+    where: { uid: req.params.uid }
+  });
+  if (destroy) {
+    res.send({
+      result: true
+    });
   }
 }));
 
